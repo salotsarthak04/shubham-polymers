@@ -266,4 +266,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
+  /* -----------------------------------------------
+     12. CERTIFICATE LIGHTBOX
+  ----------------------------------------------- */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const certCards = document.querySelectorAll('.certificate-card');
+
+  if (lightbox && lightboxImg && lightboxClose) {
+    certCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const imgSrc = card.dataset.src;
+        const imgAlt = card.querySelector('.cert-img').getAttribute('alt');
+        const title = card.querySelector('h3').textContent;
+
+        lightboxImg.src = imgSrc;
+        lightboxImg.alt = imgAlt;
+        lightboxCaption.textContent = title;
+        lightbox.classList.add('visible');
+        document.body.style.overflow = 'hidden'; // Lock scrolling
+      });
+    });
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('visible');
+      document.body.style.overflow = ''; // Restore scrolling
+    };
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === lightboxClose) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('visible')) {
+        closeLightbox();
+      }
+    });
+  }
+
 });

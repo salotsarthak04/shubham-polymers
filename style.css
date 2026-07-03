@@ -102,13 +102,13 @@ body {
 .nav-container {
   max-width: 1200px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  height: 70px;
+  height: 80px;
 }
 .nav-logo {
   display: flex; align-items: center; gap: 10px;
   text-decoration: none;
 }
-.logo-img { height: 44px; width: auto; object-fit: contain; }
+.logo-img { height: 56px; width: auto; object-fit: contain; border-radius: 6px; }
 .logo-text {
   font-weight: 700; font-size: 1rem; color: var(--navy);
   letter-spacing: -.01em;
@@ -146,7 +146,7 @@ body {
 
 /* Mobile Menu */
 .mobile-menu {
-  position: fixed; top: 70px; left: 0; right: 0; z-index: 999;
+  position: fixed; top: 80px; left: 0; right: 0; z-index: 999;
   background: var(--cream); border-bottom: 1px solid var(--border);
   padding: 16px 24px 24px;
   transform: translateY(-110%); transition: var(--transition);
@@ -680,7 +680,7 @@ body {
   padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08);
   margin-bottom: 24px;
 }
-.footer-logo { height: 48px; width: auto; object-fit: contain; margin-bottom: 16px; filter: brightness(0) invert(1); }
+.footer-logo { height: 48px; width: auto; object-fit: contain; margin-bottom: 16px; border-radius: 6px; }
 .footer-brand p { font-size: .875rem; line-height: 1.7; max-width: 260px; }
 .footer-col h4 {
   font-size: .9rem; font-weight: 700; color: var(--white); margin-bottom: 16px;
@@ -917,4 +917,234 @@ body {
   .hero-img-badge { bottom: 8px; left: 8px; padding: 6px 12px; font-size: .72rem; }
 
   .ticker-track { font-size: .72rem; gap: 18px; }
+}
+
+/* ============================================================
+   CERTIFICATES SECTION
+   ============================================================ */
+.certificates {
+  padding: 100px 0;
+  background: var(--white);
+}
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.certificate-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.certificate-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(192,57,43,.2);
+}
+.cert-img-wrap {
+  position: relative;
+  height: 280px;
+  background: #fcfcfc;
+  border-bottom: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cert-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform .5s ease;
+}
+.certificate-card:hover .cert-img {
+  transform: scale(1.03);
+}
+.cert-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26,31,54,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+.certificate-card:hover .cert-overlay {
+  opacity: 1;
+}
+.cert-view-btn {
+  color: var(--white);
+  background: var(--red);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transform: translateY(10px);
+  transition: var(--transition);
+}
+.certificate-card:hover .cert-view-btn {
+  transform: translateY(0);
+}
+.cert-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cert-body h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.cert-body p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Lightbox Modal */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  padding-top: 40px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15,17,23,0.95);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.lightbox.visible {
+  display: flex;
+  opacity: 1;
+}
+.lightbox-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+.lightbox.visible .lightbox-content {
+  transform: scale(1);
+}
+.lightbox-close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+  z-index: 2001;
+}
+.lightbox-close:hover {
+  color: var(--red);
+  transform: scale(1.1);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 1024px) {
+  .certificates-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .certificates-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .cert-img-wrap {
+    height: 240px;
+  }
+}
+
+/* ============================================================
+   GOOGLE MAPS BLOCK
+   ============================================================ */
+.contact-map-wrap {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.map-container {
+  height: 400px;
+  width: 100%;
+}
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.map-info {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--white);
+}
+.map-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.map-info p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.map-info .btn-primary {
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  .contact-map-wrap {
+    grid-template-columns: 1fr;
+  }
+  .map-container {
+    height: 320px;
+  }
+  .map-info {
+    padding: 32px 24px;
+  }
 }
