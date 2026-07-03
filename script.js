@@ -241,11 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* -----------------------------------------------
-     11. GRANULE PARALLAX ON SCROLL
+     11. GRANULE PARALLAX ON SCROLL — desktop only
   ----------------------------------------------- */
   const heroImg = document.getElementById('hero-img');
   window.addEventListener('scroll', () => {
-    if (heroImg) {
+    if (heroImg && window.innerWidth > 768) {
       const y = window.scrollY * 0.08;
       heroImg.style.transform = `perspective(1000px) rotateY(-4deg) rotateX(2deg) translateY(${y}px)`;
     }
