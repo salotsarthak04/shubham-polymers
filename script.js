@@ -73,35 +73,43 @@ document.addEventListener('DOMContentLoaded', () => {
   revealEls.forEach(el => revealObserver.observe(el));
 
   /* -----------------------------------------------
-     4. COUNTER ANIMATION
+     4. COUNTER ANIMATION (handles decimals + suffixes)
   ----------------------------------------------- */
-  function animateCounter(el, target, duration = 1800, suffix = '') {
-    let start = 0;
+  function animateCounter(el, target, duration = 1800) {
+    const decimals  = parseInt(el.dataset.decimals || '0');
+    const suffix    = el.dataset.suffix || '';
+    let start = null;
+
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease out cubic
-      el.textContent = Math.floor(eased * target).toLocaleString();
+      const eased    = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current  = eased * target;
+      el.textContent = current.toFixed(decimals) + suffix;
       if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = target.toLocaleString();
+      else el.textContent = target.toFixed(decimals) + suffix;
     };
     requestAnimationFrame(step);
   }
 
-  // Hero stats
-  const heroStatNums = document.querySelectorAll('.stat .stat-num[data-target]');
-  const heroStatsSection = document.getElementById('hero-stats');
-  let heroStatsDone = false;
 
-  const heroStatsObserver = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !heroStatsDone) {
-      heroStatsDone = true;
-      heroStatNums.forEach(el => {
-        animateCounter(el, parseInt(el.dataset.target));
+  // --- Achievements stats ---
+  const achieveNums = document.querySelectorAll('.achieve-num[data-target]');
+  const achieveSection = document.getElementById('achievements');
+  let achieveDone = false;
+
+  const achieveObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !achieveDone) {
+      achieveDone = true;
+      achieveNums.forEach((el, i) => {
+        // Stagger each card's counter start slightly
+        setTimeout(() => {
+          animateCounter(el, parseFloat(el.dataset.target));
+        }, i * 120);
       });
     }
-  }, { threshold: 0.5 });
-  if (heroStatsSection) heroStatsObserver.observe(heroStatsSection);
+  }, { threshold: 0.3 });
+  if (achieveSection) achieveObserver.observe(achieveSection);
 
   // Infrastructure stats
   const infraStatNums = document.querySelectorAll('.infra-stat-num[data-target]');
@@ -112,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (entries[0].isIntersecting && !infraStatsDone) {
       infraStatsDone = true;
       infraStatNums.forEach(el => {
-        animateCounter(el, parseInt(el.dataset.target));
+        animateCounter(el, parseFloat(el.dataset.target));
       });
     }
   }, { threshold: 0.4 });
@@ -197,19 +205,26 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* -----------------------------------------------
-     8. APP CARD HOVER PARALLAX
+     8. APP TAB SWITCHING LOGIC
   ----------------------------------------------- */
-  document.querySelectorAll('.app-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `translateY(-8px) rotateX(${y * -6}deg) rotateY(${x * 6}deg)`;
-      card.style.boxShadow = `${x * -12}px ${y * -12}px 40px rgba(0,0,0,.12)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.boxShadow = '';
+  const appTabs = document.querySelectorAll('.app-tab');
+  const appTabContents = document.querySelectorAll('.app-tab-content');
+
+  appTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active from all tabs
+      appTabs.forEach(t => t.classList.remove('active'));
+      // Remove active from all contents
+      appTabContents.forEach(c => c.classList.remove('active'));
+
+      // Add active to clicked tab
+      tab.classList.add('active');
+      // Add active to corresponding content
+      const targetId = 'tab-' + tab.dataset.tab;
+      const targetContent = document.getElementById(targetId);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
     });
   });
 
