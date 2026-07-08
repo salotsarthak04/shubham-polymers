@@ -154,18 +154,64 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Simulate sending
+      // Send actual request via FormSubmit AJAX API
       const btn = document.getElementById('form-submit-btn');
       btn.textContent = 'Sending…';
       btn.disabled = true;
 
-      setTimeout(() => {
+      const company = document.getElementById('company').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const productSelect = document.getElementById('product');
+      const productText = productSelect.value ? productSelect.options[productSelect.selectedIndex].text : "None Selected";
+      const message = document.getElementById('message').value.trim();
+
+      fetch("https://formsubmit.co/ajax/sarthaksalot@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          Name: name,
+          Email: email,
+          "Contact Number": phone,
+          Company: company,
+          "Product Interest": productText,
+          Message: message,
+          _subject: "New Inquiry from Shubham Polymers Website"
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success === "false" || data.success === false) {
+          throw new Error(data.message || "Failed to send");
+        }
         btn.textContent = 'Send Enquiry →';
         btn.disabled = false;
         form.reset();
+        successMsg.textContent = "✅ Thank you! We'll be in touch shortly.";
+        successMsg.style.color = "#16a34a";
         successMsg.classList.add('visible');
         setTimeout(() => successMsg.classList.remove('visible'), 5000);
-      }, 1500);
+      })
+      .catch(error => {
+        btn.textContent = 'Send Enquiry →';
+        btn.disabled = false;
+        if (error.message.includes("Activation") || error.message.includes("activation")) {
+          successMsg.innerHTML = "⚠️ <strong>Activation Required:</strong> FormSubmit sent a confirmation link to <strong>sarthaksalot@gmail.com</strong>. Please check your inbox or spam folder and click it to activate this form.";
+          successMsg.style.color = "#d97706"; // Amber color
+        } else {
+          successMsg.textContent = "❌ Failed to send. Please try again or email us directly.";
+          successMsg.style.color = "#c0392b";
+        }
+        successMsg.classList.add('visible');
+        setTimeout(() => successMsg.classList.remove('visible'), 8000);
+      });
     });
   }
 
@@ -274,13 +320,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxCaption = document.getElementById('lightbox-caption');
   const lightboxClose = document.getElementById('lightbox-close');
   const certCards = document.querySelectorAll('.certificate-card');
+  const factoryCards = document.querySelectorAll('.factory-card');
 
   if (lightbox && lightboxImg && lightboxClose) {
-    certCards.forEach(card => {
+    const allGalleryCards = [...certCards, ...factoryCards];
+    allGalleryCards.forEach(card => {
       card.addEventListener('click', () => {
         const imgSrc = card.dataset.src;
-        const imgAlt = card.querySelector('.cert-img').getAttribute('alt');
-        const title = card.querySelector('h3').textContent;
+        const imgEl = card.querySelector('.cert-img, .factory-img');
+        const imgAlt = imgEl.getAttribute('alt');
+        const title = card.querySelector('h3') ? card.querySelector('h3').textContent : imgAlt;
 
         lightboxImg.src = imgSrc;
         lightboxImg.alt = imgAlt;
