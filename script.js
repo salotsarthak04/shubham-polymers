@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const productText = productSelect.value ? productSelect.options[productSelect.selectedIndex].text : "None Selected";
       const message = document.getElementById('message').value.trim();
 
-      fetch("https://formsubmit.co/ajax/sarthaksalot@gmail.com", {
+      fetch("https://formsubmit.co/ajax/shubhampolymersshah@yahoo.in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = 'Send Enquiry →';
         btn.disabled = false;
         if (error.message.includes("Activation") || error.message.includes("activation")) {
-          successMsg.innerHTML = "⚠️ <strong>Activation Required:</strong> FormSubmit sent a confirmation link to <strong>sarthaksalot@gmail.com</strong>. Please check your inbox or spam folder and click it to activate this form.";
+          successMsg.innerHTML = "⚠️ <strong>Activation Required:</strong> FormSubmit sent a confirmation link to <strong>shubhampolymersshah@yahoo.in</strong>. Please check your inbox or spam folder and click it to activate this form.";
           successMsg.style.color = "#d97706"; // Amber color
         } else {
           successMsg.textContent = "❌ Failed to send. Please try again or email us directly.";
